@@ -128,7 +128,7 @@ class DockerMode(LaunchMode):
             extra_args += ' -d '  # detach is optional
 
         if self.gpu:
-            docker_run = 'docker run --gpus {}'.format(self.gpu_id)
+            docker_run = 'docker run --gpus device={}'.format(self.gpu_id)
         else:
             docker_run = 'docker run'
         if use_tty:
