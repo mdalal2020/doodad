@@ -82,11 +82,12 @@ LOCAL = Local()
 
 
 class DockerMode(LaunchMode):
-    def __init__(self, image='ubuntu:16.04', gpu=False):
+    def __init__(self, image='ubuntu:16.04', gpu=False, gpu_id=0):
         super(DockerMode, self).__init__()
         self.docker_image = image
         self.docker_name = uuid.uuid4()
         self.gpu = gpu
+        self.gpu_id = gpu_id
 
     def get_docker_cmd(self, main_cmd, extra_args='', use_tty=True,
                        verbose=True, pythonpath=None, pre_cmd=None,
@@ -127,7 +128,7 @@ class DockerMode(LaunchMode):
             extra_args += ' -d '  # detach is optional
 
         if self.gpu:
-            docker_run = 'docker run --gpus all'
+            docker_run = 'docker run --gpus {}'.format(self.gpu_id)
         else:
             docker_run = 'docker run'
         if use_tty:
