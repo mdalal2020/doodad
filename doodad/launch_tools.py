@@ -10,24 +10,24 @@ def launch_shell(
     mode=LOCAL,
     dry=False,
     mount_points=None,
-    ):
+):
     if mount_points is None:
         mount_points = []
     mode.launch_command(command, dry=dry, mount_points=mount_points)
 
 
 def launch_python(
-        target,
-        python_cmd='python',
-        mode=LOCAL,
-        mount_points=None,
-        args=None,
-        fake_display=False,
-        target_mount_dir='target',
-        use_cloudpickle=False,
-        target_mount=None,
-        launch_locally=None,
-        **launch_command_kwargs
+    target,
+    python_cmd="python",
+    mode=LOCAL,
+    mount_points=None,
+    args=None,
+    fake_display=False,
+    target_mount_dir="target",
+    use_cloudpickle=False,
+    target_mount=None,
+    launch_locally=None,
+    **launch_command_kwargs
 ):
     """
 
@@ -60,7 +60,9 @@ def launch_python(
         if launch_locally:
             target_mount = MountLocal(local_dir=target_dir)
         else:
-            target_mount = MountLocal(local_dir=target_dir, mount_point=target_mount_dir)
+            target_mount = MountLocal(
+                local_dir=target_dir, mount_point=target_mount_dir
+            )
     mount_points = mount_points + [target_mount]
     target_full_path = os.path.join(target_mount.mount_dir(), os.path.basename(target))
 
@@ -71,30 +73,38 @@ def launch_python(
         fake_display=fake_display,
         use_cloudpickle=use_cloudpickle,
     )
-    mode.launch_command(command, mount_points=mount_points,
-                        **launch_command_kwargs)
+    mode.launch_command(command, mount_points=mount_points, **launch_command_kwargs)
     return target_mount
 
+
 HEADLESS = 'xvfb-run -a -s "-ac -screen 0 1400x900x24 +extension RANDR"'
+
+
 def make_python_command(
-        target,
-        python_cmd='python',
-        args=None,
-        fake_display=False,
-        use_cloudpickle=False,
+    target,
+    python_cmd="python",
+    args=None,
+    fake_display=False,
+    use_cloudpickle=False,
 ):
 
     if fake_display:
-        cmd = '{headless} {python_cmd} {target}'.format(headless=HEADLESS, python_cmd=python_cmd, target=target)
+        cmd = "{headless} {python_cmd} {target}".format(
+            headless=HEADLESS, python_cmd=python_cmd, target=target
+        )
     else:
-        cmd = '%s %s' % (python_cmd, target)
+        cmd = "%s %s" % (python_cmd, target)
 
     args_encoded, cp_version = encode_args(args, cloudpickle=use_cloudpickle)
     if args:
-        cmd = '%s=%s %s=%s %s=%s %s' % (ARGS_DATA, args_encoded,
-                USE_CLOUDPICKLE, str(int(use_cloudpickle)),
-                CLOUDPICKLE_VERSION, cp_version,
-                cmd)
+        cmd = "%s=%s %s=%s %s=%s %s" % (
+            ARGS_DATA,
+            args_encoded,
+            USE_CLOUDPICKLE,
+            str(int(use_cloudpickle)),
+            CLOUDPICKLE_VERSION,
+            cp_version,
+            cmd,
+        )
 
     return cmd
-

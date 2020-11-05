@@ -11,16 +11,17 @@ class SlurmConfig(object):
     cmd = "echo 'Hello, world!'"
     sbatch_cmd = generator.wrap(cmd)
     """
+
     def __init__(
-            self,
-            account_name,
-            partition,
-            time_in_mins,
-            max_num_cores_per_node,
-            n_gpus=0,
-            n_cpus_per_task=1,
-            n_nodes=None,
-            extra_flags="",
+        self,
+        account_name,
+        partition,
+        time_in_mins,
+        max_num_cores_per_node,
+        n_gpus=0,
+        n_cpus_per_task=1,
+        n_nodes=None,
+        extra_flags="",
     ):
         if n_gpus > 0 and n_cpus_per_task < 2:
             raise ValueError("Must have at least 2 cpus per GPU task")
@@ -35,9 +36,9 @@ class SlurmConfig(object):
 
 
 def wrap_command_with_sbatch(
-        cmd: str,
-        config: SlurmConfig,
-        n_tasks: int,
+    cmd: str,
+    config: SlurmConfig,
+    n_tasks: int,
 ):
     """
     Wrap a command around a call to sbatch
@@ -50,8 +51,7 @@ def wrap_command_with_sbatch(
     """
     cmd = cmd.replace("'", "\\'")
     num_cpus = n_tasks * config.n_cpus_per_task
-    n_nodes = config.n_nodes or math.ceil(
-        num_cpus / config.max_num_cores_per_node)
+    n_nodes = config.n_nodes or math.ceil(num_cpus / config.max_num_cores_per_node)
     if config.n_gpus > 0:
         full_cmd = (
             "sbatch -A {account_name} -p {partition} -t {time}"

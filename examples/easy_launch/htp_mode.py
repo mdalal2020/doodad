@@ -12,8 +12,8 @@ if __name__ == "__main__":
         )
         run_experiment(
             example,
-            exp_name='test',
-            mode='htp',
+            exp_name="test",
+            mode="htp",
             variant=variant,
             use_gpu=False,
         )

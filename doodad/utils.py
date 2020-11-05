@@ -7,14 +7,14 @@ import tempfile
 
 THIS_FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 REPO_DIR = os.path.dirname(THIS_FILE_DIR)
-EXAMPLES_DIR = os.path.join(REPO_DIR, 'examples')
+EXAMPLES_DIR = os.path.join(REPO_DIR, "examples")
 
 HASH_BUF_SIZE = 65536
 
 
 def hash_file(filename):
     hasher = hashlib.md5()
-    with open(filename, 'rb') as f:
+    with open(filename, "rb") as f:
         while True:
             data = f.read(HASH_BUF_SIZE)
             if not data:
@@ -46,14 +46,14 @@ WRITTEN_TO = set()
 
 
 def add_to_script(
-        cmd,
-        verbose=True,
-        path='/tmp/doodad_generated_script.sh',
-        overwrite=False,
+    cmd,
+    verbose=True,
+    path="/tmp/doodad_generated_script.sh",
+    overwrite=False,
 ):
     if overwrite:
         with open(path, "w") as myfile:
-            myfile.write(cmd + '\n')
+            myfile.write(cmd + "\n")
         # make file executable
         st = os.stat(path)
         os.chmod(path, st.st_mode | stat.S_IEXEC)
@@ -61,7 +61,7 @@ def add_to_script(
             print("Script generated:", path)
     else:
         with open(path, "a") as myfile:
-            myfile.write(cmd + '\n')
+            myfile.write(cmd + "\n")
         if verbose:
             print("Script updated. scp this script over:", path)
 
@@ -82,8 +82,8 @@ class CommandBuilder(object):
         else:
             self.cmds.extend(other)
 
-    def to_string(self, separator=';'):
-        return ';'.join([str(cmd) for cmd in self.cmds])
+    def to_string(self, separator=";"):
+        return ";".join([str(cmd) for cmd in self.cmds])
 
     def __str__(self):
         return self.to_string()
@@ -101,14 +101,14 @@ class CommandBuilder(object):
         )
 
     @contextlib.contextmanager
-    def as_script(self, suffix='.sh'):
+    def as_script(self, suffix=".sh"):
         """
         Usage:
         with cmd_builder.as_script() as fname:
             # do stuff with fname
         """
-        with tempfile.NamedTemporaryFile(suffix=suffix, mode='w+') as f:
+        with tempfile.NamedTemporaryFile(suffix=suffix, mode="w+") as f:
             for cmd in self.cmds:
-                f.write(cmd+'\n')
+                f.write(cmd + "\n")
             f.seek(0)
             yield f.name
