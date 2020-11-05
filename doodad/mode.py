@@ -6,8 +6,7 @@ import time
 import base64
 import json
 
-from doodad.slurm.slurm_util import SlurmConfig
-
+from doodad.slurm.slurm_util import SlurmConfig, SlurmConfigMatrix
 
 try:
     from StringIO import StringIO
@@ -1104,6 +1103,35 @@ class SlurmSingularity(SingularityMode):
             singularity_cmd,
             self._slurm_config,
             n_tasks=1,
+        )
+        return full_cmd
+
+
+class SlurmSingularityMatrix(SingularityMode):
+    def __init__(
+        self, image, slurm_config: SlurmConfigMatrix, skip_wait=False, **kwargs
+    ):
+        super(SlurmSingularityMatrix, self).__init__(image, **kwargs)
+        self._slurm_config = slurm_config
+        self.skip_wait = skip_wait
+
+    def launch_command(self, cmd, mount_points=None, dry=False, verbose=False):
+        full_cmd = self.create_slurm_command(
+            cmd,
+            mount_points=mount_points,
+        )
+        utils.call_and_wait(
+            full_cmd, verbose=verbose, dry=dry, skip_wait=self.skip_wait
+        )
+
+    def create_slurm_command(self, cmd, mount_points=None):
+        singularity_cmd = self.create_singularity_cmd(
+            cmd,
+            mount_points=mount_points,
+        )
+        full_cmd = slurm_util.wrap_command_with_sbatch_matrix(
+            singularity_cmd,
+            self._slurm_config,
         )
         return full_cmd
 

@@ -35,6 +35,36 @@ class SlurmConfig(object):
         self.extra_flags = extra_flags
 
 
+class SlurmConfigMatrix(object):
+    """
+    Wrap a command around a call to sbatch
+
+    Usage:
+    ```
+    generator = SBatchGenerator()
+    cmd = "echo 'Hello, world!'"
+    sbatch_cmd = generator.wrap(cmd)
+    """
+
+    def __init__(
+        self,
+        partition,
+        time_in_mins,
+        n_cpus,
+        mem,
+        n_gpus=0,
+        extra_flags="",
+    ):
+        if n_gpus > 0 and n_cpus < 2:
+            raise ValueError("Must have at least 2 cpus per GPU task")
+        self.partition = partition
+        self.time_in_mins = time_in_mins
+        self.n_cpus = n_cpus
+        self.n_gpus = n_gpus
+        self.mem = mem
+        self.extra_flags = extra_flags
+
+
 def wrap_command_with_sbatch(
     cmd: str,
     config: SlurmConfig,
@@ -79,6 +109,50 @@ def wrap_command_with_sbatch(
                 nodes=n_nodes,
                 n_tasks=n_tasks,
                 cpus_per_task=config.n_cpus_per_task,
+                cmd=cmd,
+                extra_flags=config.extra_flags,
+            )
+        )
+    return full_cmd
+
+
+def wrap_command_with_sbatch_matrix(
+    cmd: str,
+    config: SlurmConfigMatrix,
+):
+    """
+    Wrap a command around a call to sbatch
+
+    Usage:
+    ```
+    config = SlurmConfig()
+    cmd = "echo 'Hello, world!'"
+    sbatch_cmd = wrap_command_with_sbatch(cmd, config)
+    """
+    cmd = cmd.replace("'", "\\'")
+    if config.n_gpus > 0:
+        full_cmd = (
+            "sbatch -p {partition} -t {time}"
+            " --cpus {n_cpus} --mem={mem}"
+            " --gres=gpu:{n_gpus} {extra_flags} --wrap=$'{cmd}'".format(
+                partition=config.partition,
+                time=config.time_in_mins,
+                n_cpus=config.n_cpus,
+                mem=config.mem,
+                cmd=cmd,
+                n_gpus=config.n_gpus,
+                extra_flags=config.extra_flags,
+            )
+        )
+    else:
+        full_cmd = (
+            "sbatch -p {partition} -t {time}"
+            " --cpus {n_cpus} --mem={mem}"
+            " {extra_flags} --wrap=$'{cmd}'".format(
+                partition=config.partition,
+                time=config.time_in_mins,
+                n_cpus=config.n_cpus,
+                mem=config.mem,
                 cmd=cmd,
                 extra_flags=config.extra_flags,
             )
