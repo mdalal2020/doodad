@@ -1109,11 +1109,12 @@ class SlurmSingularity(SingularityMode):
 
 class SlurmSingularityMatrix(SingularityMode):
     def __init__(
-        self, image, slurm_config: SlurmConfigMatrix, skip_wait=False, **kwargs
+        self, image, slurm_config: SlurmConfigMatrix, logdir, skip_wait=False, **kwargs
     ):
         super(SlurmSingularityMatrix, self).__init__(image, **kwargs)
         self._slurm_config = slurm_config
         self.skip_wait = skip_wait
+        self.logdir = logdir
 
     def launch_command(self, cmd, mount_points=None, dry=False, verbose=False):
         full_cmd = self.create_slurm_command(
@@ -1132,6 +1133,7 @@ class SlurmSingularityMatrix(SingularityMode):
         full_cmd = slurm_util.wrap_command_with_sbatch_matrix(
             singularity_cmd,
             self._slurm_config,
+            logdir=self.logdir,
         )
         return full_cmd
 

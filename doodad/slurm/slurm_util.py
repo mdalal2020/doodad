@@ -119,6 +119,7 @@ def wrap_command_with_sbatch(
 def wrap_command_with_sbatch_matrix(
     cmd: str,
     config: SlurmConfigMatrix,
+    logdir: str,
 ):
     """
     Wrap a command around a call to sbatch
@@ -130,15 +131,17 @@ def wrap_command_with_sbatch_matrix(
     sbatch_cmd = wrap_command_with_sbatch(cmd, config)
     """
     cmd = cmd.replace("'", "\\'")
+    logdir = logdir + "slurm-%j.out"
     if config.n_gpus > 0:
         full_cmd = (
             "sbatch -p {partition} -t {time}"
-            " --cpus {n_cpus} --mem={mem}"
+            " --cpus {n_cpus} --mem={mem} -o {logdir}"
             " --gres=gpu:{n_gpus} {extra_flags} --wrap=$'{cmd}'".format(
                 partition=config.partition,
                 time=config.time_in_mins,
                 n_cpus=config.n_cpus,
                 mem=config.mem,
+                logdir=logdir,
                 cmd=cmd,
                 n_gpus=config.n_gpus,
                 extra_flags=config.extra_flags,
