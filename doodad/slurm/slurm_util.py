@@ -131,7 +131,7 @@ def wrap_command_with_sbatch_matrix(
     sbatch_cmd = wrap_command_with_sbatch(cmd, config)
     """
     cmd = cmd.replace("'", "\\'")
-    logdir = logdir + "slurm-%j.out"
+    logdir = logdir + "/slurm-%j.out"
     if config.n_gpus > 0:
         full_cmd = (
             "sbatch -p {partition} -t {time}"
