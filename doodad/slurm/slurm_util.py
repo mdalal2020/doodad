@@ -49,7 +49,7 @@ class SlurmConfigMatrix(object):
     def __init__(
         self,
         partition,
-        time_in_mins,
+        time,
         n_cpus,
         mem,
         n_gpus=0,
@@ -58,7 +58,7 @@ class SlurmConfigMatrix(object):
         if n_gpus > 0 and n_cpus < 2:
             raise ValueError("Must have at least 2 cpus per GPU task")
         self.partition = partition
-        self.time_in_mins = time_in_mins
+        self.time = time
         self.n_cpus = n_cpus
         self.n_gpus = n_gpus
         self.mem = mem
@@ -138,7 +138,7 @@ def wrap_command_with_sbatch_matrix(
             " --cpus {n_cpus} --mem={mem} -o {logdir}"
             " --gres=gpu:{n_gpus} {extra_flags} --wrap=$'{cmd}'".format(
                 partition=config.partition,
-                time=config.time_in_mins,
+                time=config.time,
                 n_cpus=config.n_cpus,
                 mem=config.mem,
                 logdir=logdir,
@@ -153,7 +153,7 @@ def wrap_command_with_sbatch_matrix(
             " --cpus {n_cpus} --mem={mem}"
             " {extra_flags} --wrap=$'{cmd}'".format(
                 partition=config.partition,
-                time=config.time_in_mins,
+                time=config.time,
                 n_cpus=config.n_cpus,
                 mem=config.mem,
                 cmd=cmd,
