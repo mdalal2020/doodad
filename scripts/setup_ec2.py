@@ -4,15 +4,15 @@ AWS Setup script
 Based on rllab's setup_ec2
 """
 
-import boto3
+import json
+import os
 import re
 import sys
-import json
-import botocore
-import os
-
-from string import Template
 from collections import OrderedDict
+from string import Template
+
+import boto3
+import botocore
 from boto.s3.connection import Location
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))

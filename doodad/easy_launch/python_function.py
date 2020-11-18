@@ -3,18 +3,17 @@ import os
 import os.path as osp
 import sys
 import time
-from typing import NamedTuple, List, Union
+from typing import List, NamedTuple, Union
 
 import __main__ as main
 
 import doodad
-import doodad.mount as mount
-from doodad.slurm.slurm_util import SlurmConfig
-from doodad.utils import REPO_DIR
 import doodad.mode
+import doodad.mount as mount
 import doodad.ssh
 from doodad.easy_launch import config
-
+from doodad.slurm.slurm_util import SlurmConfig
+from doodad.utils import REPO_DIR
 
 GitInfo = NamedTuple(
     "GitInfo",

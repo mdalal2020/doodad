@@ -1,7 +1,7 @@
 import argparse
 
-from rllab_interface import get_experiments
 from base import *
+from rllab_interface import get_experiments
 
 if __name__ == "__main__":
     # exps = get_experiments('hopper_monotone', perf_key='Returns Average')

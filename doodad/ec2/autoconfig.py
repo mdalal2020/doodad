@@ -1,6 +1,6 @@
 import configparser
-import os
 import json
+import os
 
 from doodad.utils import REPO_DIR
 

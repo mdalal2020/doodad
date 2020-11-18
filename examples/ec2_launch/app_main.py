@@ -1,8 +1,8 @@
 import os
 
-import doodad as dd
-
 import secretlib
+
+import doodad as dd
 
 print("Launching app_main!")
 

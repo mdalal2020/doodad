@@ -13,9 +13,9 @@ or
 run_sweep_serial(func, args)
 
 """
-import os
 import itertools
 import multiprocessing
+import os
 import random
 from datetime import datetime
 
