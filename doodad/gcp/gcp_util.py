@@ -1,6 +1,6 @@
 import os
 
-from doodad.utils import hash_file, call_and_wait, CommandBuilder, REPO_DIR
+from doodad.utils import REPO_DIR, CommandBuilder, call_and_wait, hash_file
 
 GCP_STARTUP_SCRIPT_PATH = os.path.join(REPO_DIR, "scripts/gcp/gcp_startup_script.sh")
 GCP_SHUTDOWN_SCRIPT_PATH = os.path.join(REPO_DIR, "scripts/gcp/gcp_shutdown_script.sh")

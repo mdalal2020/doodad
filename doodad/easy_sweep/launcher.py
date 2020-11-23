@@ -3,12 +3,12 @@ from datetime import datetime
 import doodad
 import doodad.mode
 import doodad.mount as mount
-from doodad.utils import REPO_DIR
 from doodad.easy_sweep.hyper_sweep import (
     run_sweep_doodad,
     run_sweep_parallel,
     run_sweep_serial,
 )
+from doodad.utils import REPO_DIR
 
 INSTANCE_TO_PRICE = {
     "c4.large": 0.03,

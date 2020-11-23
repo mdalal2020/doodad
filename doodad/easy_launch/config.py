@@ -141,8 +141,9 @@ GCP_FILE_TYPES_TO_SAVE = (
 try:
     from doodad.easy_launch.config_private import *
 except ImportError as e:
-    from doodad.utils import REPO_DIR
     import os.path as osp
+
+    from doodad.utils import REPO_DIR
 
     command_to_run = "cp {} {}".format(
         __file__,

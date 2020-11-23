@@ -1,9 +1,9 @@
 import csv
-import numpy as np
-import os
 import json
+import os
 from collections import defaultdict
 
+import numpy as np
 from base import Experiment
 
 N_PERF = 5

@@ -1,7 +1,7 @@
-import pickle
-import base64
 import argparse
+import base64
 import os
+import pickle
 
 ARGS_DATA = "DOODAD_ARGS_DATA"
 USE_CLOUDPICKLE = "DOODAD_USE_CLOUDPICKLE"

@@ -2,10 +2,9 @@ import os
 
 import doodad as dd
 import doodad.ec2 as ec2
-import doodad.ssh as ssh
 import doodad.mount as mount
+import doodad.ssh as ssh
 from doodad.utils import EXAMPLES_DIR, REPO_DIR
-
 
 # Local run
 mode_local = dd.mode.Local()

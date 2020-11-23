@@ -1,6 +1,6 @@
+import argparse
 import os
 import subprocess
-import argparse
 
 
 def aws_sync(bucket_name, s3_log_dir, target_dir, exclude="*.pkl"):

@@ -1,6 +1,6 @@
-import os
 import configparser
 import io
+import os
 
 
 class AWSCredentials(object):

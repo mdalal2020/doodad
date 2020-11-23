@@ -3,8 +3,8 @@ Example script for using newton machines via docker + rllab
 """
 
 import doodad as dd
-import doodad.ssh as ssh
 import doodad.mount as mount
+import doodad.ssh as ssh
 
 MY_USERNAME = "justin"
 

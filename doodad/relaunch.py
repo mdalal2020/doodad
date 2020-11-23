@@ -15,6 +15,7 @@ INSTALL_CRIU_CMD = "apt-get install -y criu"
 ENABLE_CRIU_CMD = (
     'echo "{"experimental": true}" >> /etc/docker/daemon.json; systemctl restart docker'
 )
+import os
 
 
 def checkpoint_cmd(docker_name, chk_name, chk_dir="/docker_checkpoints"):

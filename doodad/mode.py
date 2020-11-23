@@ -1,10 +1,10 @@
+import base64
+import json
 import os
 import subprocess
 import tempfile
-import uuid
 import time
-import base64
-import json
+import uuid
 
 from doodad.slurm.slurm_util import SlurmConfig, SlurmConfigMatrix
 
@@ -13,17 +13,18 @@ try:
 except ImportError:
     from io import StringIO
 
-from .mount import MountLocal, MountS3, MountGCP
 from doodad import utils
 from doodad.slurm import slurm_util
-from .ec2.aws_util import s3_upload, s3_exists
+
+from .ec2.aws_util import s3_exists, s3_upload
 from .gcp.gcp_util import (
-    GCP_STARTUP_SCRIPT_PATH,
     GCP_SHUTDOWN_SCRIPT_PATH,
-    upload_file_to_gcp_storage,
-    get_machine_type,
+    GCP_STARTUP_SCRIPT_PATH,
     get_gpu_type,
+    get_machine_type,
+    upload_file_to_gcp_storage,
 )
+from .mount import MountGCP, MountLocal, MountS3
 
 
 class LaunchMode(object):

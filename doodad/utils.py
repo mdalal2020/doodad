@@ -1,8 +1,8 @@
+import contextlib
 import hashlib
 import os
 import stat
 import subprocess
-import contextlib
 import tempfile
 
 THIS_FILE_DIR = os.path.dirname(os.path.realpath(__file__))
