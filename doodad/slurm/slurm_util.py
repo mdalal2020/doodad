@@ -50,16 +50,18 @@ class SlurmConfigMatrix(object):
         self,
         partition,
         time,
-        n_cpus,
         mem,
+        n_cpus_per_task=1,
+        n_cpus_per_gpu=1,
         n_gpus=0,
         extra_flags="",
     ):
-        if n_gpus > 0 and n_cpus < 2:
+        if n_gpus > 0 and n_cpus_per_gpu < 2:
             raise ValueError("Must have at least 2 cpus per GPU task")
         self.partition = partition
         self.time = time
-        self.n_cpus = n_cpus
+        self.n_cpus_per_gpu = n_cpus_per_gpu
+        self.n_cpus_per_task = n_cpus_per_task
         self.n_gpus = n_gpus
         self.mem = mem
         self.extra_flags = extra_flags
@@ -135,11 +137,12 @@ def wrap_command_with_sbatch_matrix(
     if config.n_gpus > 0:
         full_cmd = (
             "sbatch -p {partition} -t {time}"
-            " --cpus {n_cpus} --mem={mem} -o {logdir}"
+            " --cpus-per-gpu {n_cpus_per_gpu} --cpus-per-task {n_cpus_per_task} --mem={mem} -o {logdir}"
             " --gres=gpu:{n_gpus} {extra_flags} --wrap=$'{cmd}'".format(
                 partition=config.partition,
                 time=config.time,
-                n_cpus=config.n_cpus,
+                n_cpus_per_gpu=config.n_cpus_per_gpu,
+                n_cpus_per_task=config.n_cpus_per_task,
                 mem=config.mem,
                 logdir=logdir,
                 cmd=cmd,
@@ -150,11 +153,11 @@ def wrap_command_with_sbatch_matrix(
     else:
         full_cmd = (
             "sbatch -p {partition} -t {time}"
-            " --cpus {n_cpus} --mem={mem}"
+            " --cpus-per-task {n_cpus_per_task} --mem={mem}"
             " {extra_flags} --wrap=$'{cmd}'".format(
                 partition=config.partition,
                 time=config.time,
-                n_cpus=config.n_cpus,
+                n_cpus_per_task=config.n_cpus_per_task,
                 mem=config.mem,
                 cmd=cmd,
                 extra_flags=config.extra_flags,
